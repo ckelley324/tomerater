@@ -28,7 +28,7 @@ class User(object):
         return total / len(self.books)
 
 
-class Book(object):
+class Book:
     def __init__(self, title, isbn):
         self.title = title
         self.isbn = isbn
@@ -49,6 +49,9 @@ class Book(object):
             self.ratings.append(new_rating)
         else:
             print("Invalid rating")
+
+    def __repr__(self):
+        return "{title}".format(title=self.title)
 
     def __eq__(self, other_book):
         return self.title == other_book.title and self.isbn == other_book.isbn
@@ -159,3 +162,12 @@ class TomeRater:
             if value.get_average_rating() > positive:
                 positive = value.get_average_rating()
         return value
+
+    def get_n_most_read_books(self, n):
+        return sorted(self.books, key=self.books.get, reverse=True)[:n]
+
+    def get_n_most_prolific_readers(self, n):
+        books_list = {}
+        for email, user in self.users.items():
+            books_list[email] = len(user.books)
+        return sorted(books_list, key=books_list.get, reverse=True)[:n]
